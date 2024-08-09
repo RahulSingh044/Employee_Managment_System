@@ -4,8 +4,8 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Department {
-    private Connection connection; // Database connection
-    private Scanner scanner;
+    private final Connection connection; // Database connection
+    private final Scanner scanner;
 
     public Department(Connection connection, Scanner scanner) {
         this.connection = connection;

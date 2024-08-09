@@ -1,3 +1,4 @@
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -54,7 +55,7 @@ public class Employee {
                 } else {
                     System.out.println("Failed to add employee.");
                 }
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 // Handling exceptions and displaying error messages
                 System.out.println("Error: " + e.getMessage());
             }
@@ -71,11 +72,15 @@ public class Employee {
                 ResultSet rs = pstmt.executeQuery();) {
             // Iterating through the result set and displaying employee details
             while (rs.next()) {
+            System.out.println("");
+            System.out.println("");
                 String name = rs.getString("first_name") + " " + rs.getString("last_name");
                 System.out.println(rs.getInt("employee_id") + "\t" + name + "\t" + rs.getString("email") + "\t"
                         + rs.getString("phone") + "\t" + rs.getString("hire_date") + "\t" + rs.getString("job_title")
                         + "\t" + rs.getDouble("salary"));
             }
+            rs.close();
+            pstmt.close();
         } catch (Exception e) {
             // Handling exceptions and displaying error messages
             System.err.println("Unable to fetch the employee information due to: " + e.getMessage());
