@@ -6,8 +6,8 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Employee {
-    private Connection connection; // Database connection
-    private Scanner scanner; // Scanner for user input
+    private final Connection connection; // Database connection
+    private final Scanner scanner; // Scanner for user input
 
     // Constructor to initialize the connection and scanner
     public Employee(Connection connection, Scanner scanner) {
@@ -32,20 +32,47 @@ public class Employee {
         String job = scanner.next();
         System.out.print("Salary: ");
         double salary = scanner.nextDouble();
+        int jobid;
+
+        try {
+            // Prepare an SQL query to fetch the job_id based on the job title provided by the user
+            String jobID =  "SELECT job_id FROM employee WHERE job_title = ?";
+            PreparedStatement pstmt = connection.prepareStatement(jobID);
+        
+            // Set the job title in the prepared statement (user-provided job title)
+            pstmt.setString(1, job);
+        
+            // Execute the query and get the result set containing the job_id
+            ResultSet rs = pstmt.executeQuery();
+        
+            // Check if a result was returned (i.e., if the job title exists in the table)
+            if (rs.next()) {
+                // Retrieve the job_id from the result set and convert it to an integer
+                jobid = Integer.parseInt(rs.getString("job_id"));
+            } else {
+                // If the job title is not found, inform the user and exit the method
+                System.out.println("Invalid job title. Please try again.");
+                return;
+            }
+        } catch (NumberFormatException | SQLException e) {
+            // Handle any exceptions (e.g., SQL issues or number formatting problems)
+            System.err.println("Error executing query: " + e.getMessage());
+            return;
+        }
+        
 
         if (isValidEmail(email) && isValidName(firstName, lastName) && isValidPhone(phone)) {
             try {
                 // SQL query to insert the employee details into the employees table
-                String sql = "INSERT INTO employees (first_name, last_name, email, phone, hire_date, job_title, salary) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                String sql = "INSERT INTO employees (first_name, last_name, email, phone, hire_date, job_id, salary) VALUES (?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement pstmt = connection.prepareStatement(sql);
-
                 // Setting the parameters for the PreparedStatement
                 pstmt.setString(1, firstName);
                 pstmt.setString(2, lastName);
                 pstmt.setString(3, email);
                 pstmt.setString(4, phone);
                 pstmt.setString(5, hireDate);
-                pstmt.setString(6, job);
+                pstmt.setInt(6, jobid);
                 pstmt.setDouble(7, salary);
 
                 // Executing the update and checking if the employee was added successfully

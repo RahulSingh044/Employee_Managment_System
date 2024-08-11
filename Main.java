@@ -10,7 +10,7 @@ public class Main {
     static void createConnections() throws Exception {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/employee_ms";
+            String url = "jdbc:mysql://localhost:3306/employedb";
             String user = "root";
             String password = "rahhul_36";
 
@@ -30,23 +30,26 @@ public class Main {
             boolean exit = false;
 
             while (!exit) {
-            String str = "";
             System.out.println(
                     "------------------------------------------------------------------------------------------------");
-            System.out.println("                Welcome to Employee Management SYSTEM");
+            System.out.println("                Welcome to CODEZ SOLUTION pvt. Ltd.");
             System.out.println(
                     "------------------------------------------------------------------------------------------------");
 
                 System.out.println("MenuBar:");
-                System.out.println("1. Employee Data");
-                System.out.println("2. Department Data");
-                System.out.println("3. Exit");
+                System.out.println("1. Employee");
+                System.out.println("2. Department");
+                System.out.println("3. Jobs Fields");
+                System.out.println("4. Projects Info");
+                System.out.println("5. Exit");
                 System.out.print("Enter your choice: ");
                 int x = scanner.nextInt();
                 switch (x) {
                     case 1 -> mn.EmployeeIntro();
                     case 2 -> mn.DepartmentIntro();
-                    case 3 -> exit = true;
+                    case 3 -> mn.Jobsf();
+                    case 4 -> mn.ProjectsInfo();
+                    case 5 -> exit = true;
                     default -> System.out.println("Invalid choice! Please try again.");
                 }
             }
@@ -66,7 +69,7 @@ public class Main {
         System.out.println("");
         System.out.println(
                     "------------------------------------------------------------------------------------------------");
-            System.out.println("                    Welcome to Employer's Database");
+            System.out.println("                    Welcome to Employers Section");
             System.out.println(
                     "------------------------------------------------------------------------------------------------");
            
@@ -100,7 +103,7 @@ public class Main {
         while (!isDepartment) {
             System.out.println(
                     "------------------------------------------------------------------------------------------------");
-            System.out.println("                    Welcome to Department Database");
+            System.out.println("                    Welcome to Department Section");
             System.out.println(
                     "------------------------------------------------------------------------------------------------");
             System.out.println("1. Add Department");
@@ -119,5 +122,15 @@ public class Main {
                 default -> System.out.println("Invalid choice! Please try again.");
             }
         }
+    }
+
+    void Jobsf() throws SQLException {
+        System.out.println("");
+        System.out.println("");
+    }
+
+    void ProjectsInfo() throws SQLException {
+        System.out.println("");
+        System.out.println("");
     }
 }
