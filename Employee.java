@@ -27,27 +27,29 @@ public class Employee {
         String phone = scanner.next();
         System.out.print("Hire Date (YYYY-MM-DD): ");
         String hireDate = scanner.next();
-        System.out.print("Job Title: ");
-        String job = scanner.next();
         System.out.print("Salary: ");
         double salary = scanner.nextDouble();
+        scanner.nextLine();
+        System.out.print("Job Title: ");
+        String job = scanner.nextLine();
         int jobid;
 
         try {
             // Prepare an SQL query to fetch the job_id based on the job title provided by the user
-            String jobID =  "SELECT job_id FROM employee WHERE job_title = ?";
-            PreparedStatement pstmt = connection.prepareStatement(jobID);
+            String query =  "SELECT job_id FROM job WHERE job_title = ?";
+            PreparedStatement pstmt = connection.prepareStatement(query);
         
             // Set the job title in the prepared statement (user-provided job title)
             pstmt.setString(1, job);
         
             // Execute the query and get the result set containing the job_id
             ResultSet rs = pstmt.executeQuery();
+            System.out.println("Job Title: " + job);
         
             // Check if a result was returned (i.e., if the job title exists in the table)
             if (rs.next()) {
                 // Retrieve the job_id from the result set and convert it to an integer
-                jobid = Integer.parseInt(rs.getString("job_id"));
+                jobid = rs.getInt("job_id");
             } else {
                 // If the job title is not found, inform the user and exit the method
                 System.out.println("Invalid job title. Please try again.");
@@ -63,7 +65,7 @@ public class Employee {
         if (isValidEmail(email) && isValidName(firstName, lastName) && isValidPhone(phone)) {
             try {
                 // SQL query to insert the employee details into the employees table
-                String sql = "INSERT INTO employees (first_name, last_name, email, phone, hire_date, job_id, salary) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                String sql = "INSERT INTO employee (first_name, last_name, email, phone, hire_date, job_id, salary) VALUES (?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement pstmt = connection.prepareStatement(sql);
                 // Setting the parameters for the PreparedStatement
                 pstmt.setString(1, firstName);
@@ -92,7 +94,7 @@ public class Employee {
 
     // Method to view all employees in the database
     void viewEmployees() {
-        String query = "SELECT * FROM employees"; // SQL query to select all employees
+        String query = "SELECT * FROM employee"; // SQL query to select all employees
         try (
                 PreparedStatement pstmt = connection.prepareStatement(query);
                 ResultSet rs = pstmt.executeQuery();) {
@@ -128,13 +130,43 @@ public class Employee {
         String phone = scanner.next();
         System.out.print("Enter the new hire date (YYYY-MM-DD): ");
         String hireDate = scanner.next();
-        System.out.print("Enter the new job title: ");
-        String job = scanner.next();
         System.out.print("Enter the new salary: ");
         double salary = scanner.nextDouble();
+        scanner.nextLine();
+        System.out.print("Enter the new job title: ");
+        String job = scanner.nextLine();
+
+        int jobid;
+
+        try {
+            // Prepare an SQL query to fetch the job_id based on the job title provided by the user
+            String query =  "SELECT job_id FROM job WHERE job_title = ?";
+            PreparedStatement pstmt = connection.prepareStatement(query);
+        
+            // Set the job title in the prepared statement (user-provided job title)
+            pstmt.setString(1, job);
+        
+            // Execute the query and get the result set containing the job_id
+            ResultSet rs = pstmt.executeQuery();
+            System.out.println("Job Title: " + job);
+        
+            // Check if a result was returned (i.e., if the job title exists in the table)
+            if (rs.next()) {
+                // Retrieve the job_id from the result set and convert it to an integer
+                jobid = rs.getInt("job_id");
+            } else {
+                // If the job title is not found, inform the user and exit the method
+                System.out.println("Invalid job title. Please try again.");
+                return;
+            }
+        } catch (NumberFormatException | SQLException e) {
+            // Handle any exceptions (e.g., SQL issues or number formatting problems)
+            System.err.println("Error executing query: " + e.getMessage());
+            return;
+        }
 
         // SQL query to update the employee details based on employee ID
-        String query = "UPDATE employees SET first_name = ?, last_name = ?, email = ?, phone = ?, hire_date = ?, job_title = ?, salary = ? WHERE employee_id = ?";
+        String query = "UPDATE employee SET first_name = ?, last_name = ?, email = ?, phone = ?, hire_date = ?, job_id = ?, salary = ? WHERE employee_id = ?";
         if (isValidEmail(email) && isValidName(firstName, lastName) && isValidPhone(phone)) {
             try (
                     PreparedStatement pstmt = connection.prepareStatement(query);) {
@@ -144,7 +176,7 @@ public class Employee {
                 pstmt.setString(3, email);
                 pstmt.setString(4, phone);
                 pstmt.setString(5, hireDate);
-                pstmt.setString(6, job);
+                pstmt.setInt(6, jobid);
                 pstmt.setDouble(7, salary);
                 pstmt.setInt(8, id);
 

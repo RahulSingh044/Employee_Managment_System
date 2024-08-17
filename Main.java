@@ -36,7 +36,7 @@ public class Main {
             System.out.println(
                     "------------------------------------------------------------------------------------------------");
 
-                System.out.println("MenuBar:");
+                System.out.println("Menu_Bar:");
                 System.out.println("1. Employee");
                 System.out.println("2. Department");
                 System.out.println("3. Jobs Fields");
@@ -125,12 +125,59 @@ public class Main {
     }
 
     void Jobsf() throws SQLException {
+        boolean isJOB = false;
+        JobsData jb = new JobsData(connection,scanner);
         System.out.println("");
         System.out.println("");
+        System.out.println(
+            "------------------------------------------------------------------------------------------------");
+    System.out.println("                    Welcome to Jobs Fields");
+    System.out.println(
+            "------------------------------------------------------------------------------------------------");
+            System.out.println("1. Add JOB");
+            System.out.println("2. Update JOB");
+            System.out.println("3. Delete JOB");
+            System.out.println("4. View JOB Details");
+            System.out.println("5. Exit");
+            System.out.println(
+                    "------------------------------------------------------------------------------------------------");
+            int choice = scanner.nextInt();
+            switch (choice) {
+                case 1 -> jb.addJob();
+                case 2 -> jb.updateJob();
+                case 3 -> jb.deleteJOB();
+                case 4 -> jb.readJOB();
+                case 5 -> isJOB = true;
+                default -> System.out.println("Invalid choice! Please try again.");
+            }
     }
 
     void ProjectsInfo() throws SQLException {
+        boolean isProject = false;
+        ProjectData pd = new ProjectData(connection, scanner);
         System.out.println("");
         System.out.println("");
+        System.out.println(
+            "------------------------------------------------------------------------------------------------");
+    System.out.println("                    Welcome to Projects Details");
+    System.out.println(
+            "------------------------------------------------------------------------------------------------");
+            System.out.println("1. Add JOB");
+            System.out.println("2. Update JOB");
+            System.out.println("3. Delete JOB");
+            System.out.println("4. View JOB Details");
+            System.out.println("5. Exit");
+            System.out.println(
+                    "------------------------------------------------------------------------------------------------");
+            int choice = scanner.nextInt();
+            switch (choice) {
+                case 1 -> pd.addProject();
+                case 2 -> pd.updateProject();
+                case 3 -> pd.deleteProject();
+                case 4 -> pd.ReadProject();
+                case 5 -> isProject = true;
+                default -> System.out.println("Invalid choice! Please try again.");
+            }
     }
 }
+
