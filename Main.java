@@ -74,8 +74,6 @@ public class Main {
                     "------------------------------------------------------------------------------------------------");
            
         while (!isEmployee) {
-            System.out.println("");
-            System.out.println("");
             System.out.println("1. Add Employee");
             System.out.println("2. Update Employee");
             System.out.println("3. Delete Employee");
@@ -113,11 +111,13 @@ public class Main {
             System.out.println("5. Exit");
             System.out.println(
                     "------------------------------------------------------------------------------------------------");
+            System.out.print("Enter your Choice: ");
             int choice = scanner.nextInt();
             switch (choice) {
                 case 1 -> dpt.adddepartment();
                 case 2 -> dpt.updateDepartment();
                 case 3 -> dpt.deleteDepartment();
+                case 4 -> dpt.readDepartment();
                 case 5 -> isDepartment = true;
                 default -> System.out.println("Invalid choice! Please try again.");
             }
@@ -127,6 +127,7 @@ public class Main {
     void Jobsf() throws SQLException {
         boolean isJOB = false;
         JobsData jb = new JobsData(connection,scanner);
+        while (!isJOB) {
         System.out.println("");
         System.out.println("");
         System.out.println(
@@ -141,6 +142,7 @@ public class Main {
             System.out.println("5. Exit");
             System.out.println(
                     "------------------------------------------------------------------------------------------------");
+            System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
             switch (choice) {
                 case 1 -> jb.addJob();
@@ -150,11 +152,13 @@ public class Main {
                 case 5 -> isJOB = true;
                 default -> System.out.println("Invalid choice! Please try again.");
             }
+        }
     }
 
     void ProjectsInfo() throws SQLException {
         boolean isProject = false;
         ProjectData pd = new ProjectData(connection, scanner);
+        while(!isProject) {
         System.out.println("");
         System.out.println("");
         System.out.println(
@@ -162,13 +166,14 @@ public class Main {
     System.out.println("                    Welcome to Projects Details");
     System.out.println(
             "------------------------------------------------------------------------------------------------");
-            System.out.println("1. Add JOB");
-            System.out.println("2. Update JOB");
-            System.out.println("3. Delete JOB");
-            System.out.println("4. View JOB Details");
+            System.out.println("1. Add Project");
+            System.out.println("2. Update Project");
+            System.out.println("3. Delete Project");
+            System.out.println("4. View Projects");
             System.out.println("5. Exit");
             System.out.println(
                     "------------------------------------------------------------------------------------------------");
+            System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
             switch (choice) {
                 case 1 -> pd.addProject();
@@ -178,6 +183,7 @@ public class Main {
                 case 5 -> isProject = true;
                 default -> System.out.println("Invalid choice! Please try again.");
             }
+        }
     }
 }
 

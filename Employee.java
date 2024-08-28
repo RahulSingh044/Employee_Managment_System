@@ -35,17 +35,18 @@ public class Employee {
         int jobid;
 
         try {
-            // Prepare an SQL query to fetch the job_id based on the job title provided by the user
-            String query =  "SELECT job_id FROM job WHERE job_title = ?";
+            // Prepare an SQL query to fetch the job_id based on the job title provided by
+            // the user
+            String query = "SELECT job_id FROM job WHERE job_title = ?";
             PreparedStatement pstmt = connection.prepareStatement(query);
-        
+
             // Set the job title in the prepared statement (user-provided job title)
             pstmt.setString(1, job);
-        
+
             // Execute the query and get the result set containing the job_id
             ResultSet rs = pstmt.executeQuery();
             System.out.println("Job Title: " + job);
-        
+
             // Check if a result was returned (i.e., if the job title exists in the table)
             if (rs.next()) {
                 // Retrieve the job_id from the result set and convert it to an integer
@@ -60,7 +61,6 @@ public class Employee {
             System.err.println("Error executing query: " + e.getMessage());
             return;
         }
-        
 
         if (isValidEmail(email) && isValidName(firstName, lastName) && isValidPhone(phone)) {
             try {
@@ -94,21 +94,30 @@ public class Employee {
 
     // Method to view all employees in the database
     void viewEmployees() {
-        String query = "SELECT * FROM employee"; // SQL query to select all employees
+        String query = "SELECT employee.employee_id, employee.first_name, employee.last_name, employee.email, employee.phone, employee.hire_date, job.job_title, employee.salary FROM employee JOIN job WHERE employee.job_id = job.job_id;"; 
         try (
                 PreparedStatement pstmt = connection.prepareStatement(query);
                 ResultSet rs = pstmt.executeQuery();) {
-            // Iterating through the result set and displaying employee details
-            while (rs.next()) {
-            System.out.println("");
-            System.out.println("");
-                String name = rs.getString("first_name") + " " + rs.getString("last_name");
-                System.out.println(rs.getInt("employee_id") + "\t" + name + "\t" + rs.getString("email") + "\t"
-                        + rs.getString("phone") + "\t" + rs.getString("hire_date") + "\t" + rs.getString("job_title")
-                        + "\t" + rs.getDouble("salary"));
-            }
+                System.out.println("");
+                System.out.println("");
+                System.out.printf("%4s\t%-10s\t%-25s\t%-10s\t%-10s\t%-30s\t%-10s\n\n", "ID", "Name", "Email", "Phone", "Hire Date", "Job Title", "Salary");
+                while (rs.next()) {
+
+                    String name = rs.getString("first_name") + " " + rs.getString("last_name");
+
+                    System.out.printf(String.format("%4d\t", rs.getInt("employee_id")));
+                    System.out.printf(String.format("%-10s\t", name));
+                    System.out.printf(String.format("%-25s\t", rs.getString("email")));
+                    System.out.printf(String.format("%-10s\t", rs.getString("phone")));
+                    System.out.printf(String.format("%-10s\t", rs.getString("hire_date")));
+                    System.out.printf(String.format("%-30s\t", rs.getString("job_title")));
+                    System.out.printf(String.format("%-10.2f\t", rs.getDouble("salary")));
+
+                    System.out.println("\n");
+                }
             rs.close();
             pstmt.close();
+            System.out.println("");
         } catch (Exception e) {
             // Handling exceptions and displaying error messages
             System.err.println("Unable to fetch the employee information due to: " + e.getMessage());
@@ -139,17 +148,18 @@ public class Employee {
         int jobid;
 
         try {
-            // Prepare an SQL query to fetch the job_id based on the job title provided by the user
-            String query =  "SELECT job_id FROM job WHERE job_title = ?";
+            // Prepare an SQL query to fetch the job_id based on the job title provided by
+            // the user
+            String query = "SELECT job_id FROM job WHERE job_title = ?";
             PreparedStatement pstmt = connection.prepareStatement(query);
-        
+
             // Set the job title in the prepared statement (user-provided job title)
             pstmt.setString(1, job);
-        
+
             // Execute the query and get the result set containing the job_id
             ResultSet rs = pstmt.executeQuery();
             System.out.println("Job Title: " + job);
-        
+
             // Check if a result was returned (i.e., if the job title exists in the table)
             if (rs.next()) {
                 // Retrieve the job_id from the result set and convert it to an integer
@@ -203,7 +213,7 @@ public class Employee {
         int id = scanner.nextInt();
 
         // SQL query to delete the employee based on employee ID
-        String query = "DELETE FROM employees WHERE employee_id = ?";
+        String query = "DELETE FROM employee WHERE employee_id = ?";
         try (
                 PreparedStatement pstmt = connection.prepareStatement(query);) {
             // Setting the employee ID parameter
@@ -235,6 +245,13 @@ public class Employee {
     }
 
     private static boolean isValidPhone(String number) {
-        return number.matches("[0-9]+");
+        if(number.length() != 10 || !number.matches("[0-9]+")){
+            return false;
+        }
+        else {
+            return true;
+        }
+        
     }
+
 }
