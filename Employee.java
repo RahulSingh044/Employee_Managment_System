@@ -262,12 +262,7 @@ public class Employee {
     }
 
     private static boolean isValidPhone(String number) {
-        if(number.length() != 10 || !number.matches("[0-9]+")){
-            return false;
-        }
-        else {
-            return true;
-        }
+        return !(number.length() != 10 && !number.matches("[0-9]+"));
         
     }
 
