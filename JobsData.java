@@ -44,30 +44,35 @@ public class JobsData {
             PreparedStatement pstmt = connection.prepareStatement(checkJOB);
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
-
             if (!rs.next()) {
                 System.out.println("!! NO SUCH JOB IS FOUND IN DATABASE !!");
-            } else {
-            scanner.nextLine();
-                System.out.print("Enter the updated JOB_title: ");
-                String jbTitle = scanner.nextLine();
-                System.out.print("Enter updated min_Salary: ");
-                double minSalary = scanner.nextDouble();
-                System.out.print("Enter updates max_Salary: ");
-                double maxSalary = scanner.nextDouble();
+                return;
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
 
-                PreparedStatement ps = connection
-                        .prepareStatement("UPDATE job SET job_title = ?, min_Salary = ?, max_Salary = ? WHERE job_title = ?");
-                ps.setString(1, jbTitle);
-                ps.setDouble(2, minSalary);
-                ps.setDouble(3, maxSalary);
-                ps.setInt(4,id);
-                int rowAffected = ps.executeUpdate();
-                if (rowAffected > 0) {
-                    System.out.println("Job updated successfully.");
-                } else {
-                    System.out.println("Failed to update job.");
-                }
+        scanner.nextLine();
+        System.out.print("Enter the updated JOB_title: ");
+        String jbTitle = scanner.nextLine();
+        System.out.print("Enter updated min_Salary: ");
+        double minSalary = scanner.nextDouble();
+        System.out.print("Enter updates max_Salary: ");
+        double maxSalary = scanner.nextDouble();
+
+        try {
+            PreparedStatement ps = connection
+                    .prepareStatement(
+                            "UPDATE job SET job_title = ?, min_Salary = ?, max_Salary = ? WHERE job_title = ?");
+            ps.setString(1, jbTitle);
+            ps.setDouble(2, minSalary);
+            ps.setDouble(3, maxSalary);
+            ps.setInt(4, id);
+            int rowAffected = ps.executeUpdate();
+            if (rowAffected > 0) {
+                System.out.println("Job updated successfully.");
+            } else {
+                System.out.println("Failed to update job.");
             }
         } catch (SQLException e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -79,13 +84,13 @@ public class JobsData {
         int id = scanner.nextInt();
 
         try (
-            PreparedStatement pstmt = connection.prepareStatement("DELETE FROM job WHERE job_id =?");
+                PreparedStatement pstmt = connection.prepareStatement("DELETE FROM job WHERE job_id =?");
 
         ) {
             pstmt.setInt(1, id);
             int rowAffected = pstmt.executeUpdate();
 
-            if(rowAffected >= 0){
+            if (rowAffected >= 0) {
                 System.out.println("Job deleted successfully.");
             } else {
                 System.out.println("No job found with the given ID.");

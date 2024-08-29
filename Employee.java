@@ -125,10 +125,25 @@ public class Employee {
     }
 
     // Method to update an existing employee's details
-    void updateEmployee() {
+    void updateEmployee(){
         // Collecting the employee ID and new details from user input
         System.out.print("Enter the employee ID to update: ");
         int id = scanner.nextInt();
+
+        try {
+            String searchquery = "SELECT 1 FROM employee WHERE employee_id = ?";
+            PreparedStatement pst = connection.prepareStatement(searchquery);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
+            if(!rs.next()) {
+                System.out.println("Employee not found.");
+                return;
+            }
+        } catch (SQLException e ) {
+            // Handle any exceptions (e.g., SQL issues or number formatting problems)
+            System.out.println("Eror: " + e.getMessage());
+        }
+        
         System.out.print("Enter the new first name: ");
         String firstName = scanner.next();
         System.out.print("Enter the new last name: ");
@@ -174,6 +189,7 @@ public class Employee {
             System.err.println("Error executing query: " + e.getMessage());
             return;
         }
+    
 
         // SQL query to update the employee details based on employee ID
         String query = "UPDATE employee SET first_name = ?, last_name = ?, email = ?, phone = ?, hire_date = ?, job_id = ?, salary = ? WHERE employee_id = ?";
@@ -205,6 +221,7 @@ public class Employee {
             System.out.println("Invalid input. Please make sure all fields are filled correctly.");
         }
     }
+
 
     // Method to delete an employee from the database
     void deleteEmployee() throws SQLException {
